@@ -1,0 +1,66 @@
+name: Build DMG
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag (e.g. v1.1.0)'
+        required: false
+        type: string
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install rumps pyobjc Pillow
+
+      - name: Build .app bundle
+        run: |
+          mkdir -p OpenBalance.app/Contents/MacOS
+          mkdir -p OpenBalance.app/Contents/Resources
+          cp source/main_script.py OpenBalance.app/Contents/Resources/
+          cp source/Info.plist OpenBalance.app/Contents/Info.plist
+
+          # Build launcher
+          clang -O2 -o OpenBalance.app/Contents/MacOS/OpenBalance scripts/launcher.c
+
+          # Create icon
+          python3 scripts/generate_icon.py
+
+          # Sign
+          codesign --force --deep --sign - OpenBalance.app
+
+      - name: Package DMG
+        run: |
+          mkdir -p /tmp/dmg-src
+          cp -R OpenBalance.app /tmp/dmg-src/
+          ln -s /Applications /tmp/dmg-src/Applications
+          hdiutil create -volname "OpenBalance" \
+            -srcfolder /tmp/dmg-src -ov \
+            -format UDZO -fs HFS+ OpenBalance.dmg
+
+      - name: Upload DMG
+        uses: actions/upload-artifact@v4
+        with:
+          name: OpenBalance.dmg
+          path: OpenBalance.dmg
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: OpenBalance.dmg
+          generate_release_notes: true
