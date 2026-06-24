@@ -296,6 +296,26 @@ hdiutil create -volname "OpenBalance" -srcfolder /tmp/dmg-src \
 
 <br>
 
+# 🙏 Credits / 致谢
+
+| Project | Role |
+|---------|------|
+| [rumps](https://github.com/jaredks/rumps) | macOS menu bar framework |
+| [PyObjC](https://github.com/ronaldoussoren/pyobjc) | Python-macOS bridge |
+| [Pillow](https://python-pillow.org/) | Icon generation and image processing |
+| [macOS Keychain](https://developer.apple.com/documentation/security/keychain_services) | Secure API key storage |
+| [All 31+ provider API teams](https://github.com/monah-studio/OpenBalance#-supported-providers) | Balance endpoint documentation and maintenance |
+
+| 项目 | 作用 |
+|------|------|
+| [rumps](https://github.com/jaredks/rumps) | macOS 菜单栏框架 |
+| [PyObjC](https://github.com/ronaldoussoren/pyobjc) | Python-macOS 桥接 |
+| [Pillow](https://python-pillow.org/) | 图标生成与图片处理 |
+| [macOS Keychain](https://developer.apple.com/documentation/security/keychain_services) | API 密钥安全存储 |
+| [All 31+ provider API teams](https://github.com/monah-studio/OpenBalance#-supported-providers) | 余额接口文档与维护 |
+
+<br>
+
 <hr>
 
 <p align="center">
